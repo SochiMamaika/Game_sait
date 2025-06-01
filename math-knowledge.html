@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Knowledge</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .container {
+      background-color: #1e1e2f;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0 10px #00ffff80;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+      margin: 1rem 0;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .info {
+      margin-top: 1rem;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🧠 Math Knowledge</h2>
+    <div id="example">Нажмите Start для начала!</div>
+    <input type="number" id="answer" placeholder="Введите ответ..." />
+    <button id="startButton">Start</button>
+    <div id="info" class="info"></div>
+  </div>
+
+  <script>
+    const example = document.getElementById("example");
+    const answerInput = document.getElementById("answer");
+    const info = document.getElementById("info");
+    const startButton = document.getElementById("startButton");
+
+    let correct = 0;
+    let wrong = 0;
+    let timer = null;
+    let timeLeft = 5;
+    let currentResult = 0;
+    let active = false;
+
+    function generateExample() {
+  let num1 = Math.floor(Math.random() * 20) + 1; // 1–20
+  let num2 = Math.floor(Math.random() * 20) + 1; // 1–20
+  let action = Math.floor(Math.random() * 4);    // 0–3
+  let symbol;
+
+  switch (action) {
+    case 0:
+      symbol = "+";
+      currentResult = num1 + num2;
+      break;
+    case 1:
+      symbol = "-";
+      currentResult = num1 - num2;
+      break;
+    case 2:
+      symbol = "*";
+      currentResult = num1 * num2;
+      break;
+    case 3:
+      num2 = Math.floor(Math.random() * 19) + 1; // 1–19
+      num1 = num2 * (Math.floor(Math.random() * 5) + 1); // кратное num2
+      symbol = "/";
+      currentResult = num1 / num2;
+      break;
+  }
+
+  example.textContent = `${num1} ${symbol} ${num2} = ?`;
+  timeLeft = 5;
+}
+
+    function lose(reason) {
+      clearInterval(timer);
+      active = false;
+      answerInput.value = "";
+      info.innerHTML = `${reason}<br>Правильных: ${correct}, Неправильных: ${wrong}`;
+      startButton.textContent = "Start";
+    }
+
+    function check() {
+      const userAnswer = parseInt(answerInput.value);
+      if (userAnswer === currentResult) {
+        correct++;
+        answerInput.value = "";
+        generateExample();
+      } else {
+        wrong++;
+        lose("Неправильный ответ! Вы проиграли!");
+      }
+    }
+
+    startButton.addEventListener("click", () => {
+      if (!active) {
+        correct = 0;
+        wrong = 0;
+        info.textContent = "";
+        generateExample();
+        startButton.textContent = "Next";
+        active = true;
+        timer = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 0) {
+            wrong++;
+            lose("Время вышло! Вы проиграли!");
+          }
+        }, 1000);
+      } else {
+        check();
+      }
+    });
+
+    answerInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && active) check();
+    });
+  </script>
+</body>
+</html>
