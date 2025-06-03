@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Перевод в двоичную систему</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .game-box {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    input, button {
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #00ffff;
+      color: #000000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      box-shadow: 0 0 5px #00ffff;
+      background-color: #00ffff;
+      transition: all 0.3s ease-in-out;
+      transform: scale(1.05); /* Чуть увеличиваем при наведении */
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-box">
+    <h1>Перевод в двоичную систему</h1>
+    <p id="question">Нажми "Начать", чтобы играть!</p>
+
+    <input type="text" id="answerInput" class="hidden" placeholder="Введите двоичную форму">
+    <br>
+    <button id="submitBtn" class="hidden">Проверить</button>
+    <button id="startBtn">Начать</button>
+    <p id="feedback"></p>
+    <p id="score"></p>
+
+<div style="text-align: center; margin-top: 1rem;">
+  <button id="instructionBtn" class="hidden">Обучение переводу</button>
+</div>
+</div>
+
+  <script>
+    let correctCount = 0;
+    let number = 0;
+    let end = 10;
+
+    const question = document.getElementById("question");
+    const input = document.getElementById("answerInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const startBtn = document.getElementById("startBtn");
+    const instructionBtn = document.getElementById("instructionBtn");
+    const feedback = document.getElementById("feedback");
+    const score = document.getElementById("score");
+
+    function updateDifficulty() {
+      if (correctCount > 20) {
+        end = 1000;
+      } else if (correctCount > 10) {
+        end = 200;
+      } else if (correctCount > 5) {
+        end = 100;
+      }
+    }
+
+    function generateNumber() {
+      updateDifficulty();
+      number = Math.floor(Math.random() * end) + 1;
+      question.textContent = `Переведи число ${number} в двоичную форму:`;
+    }
+
+    submitBtn.onclick = () => {
+      const userAnswer = input.value.trim();
+      const correctBinary = number.toString(2);
+
+      if (userAnswer === correctBinary) {
+        correctCount++;
+        feedback.textContent = "✅ Молодец! Верно.";
+        input.value = "";
+        generateNumber();
+      } else {
+        feedback.textContent = `❌ Неправильно. Правильный ответ: ${correctBinary}`;
+        score.textContent = `Всего правильных ответов: ${correctCount}`;
+        input.classList.add("hidden");
+        submitBtn.classList.add("hidden");
+        startBtn.textContent = "Играть снова";
+        instructionBtn.classList.remove("hidden");
+        startBtn.classList.remove("hidden");
+        correctCount = 0;
+        input.value = "";
+      }
+    };
+
+    startBtn.onclick = () => {
+      instructionBtn.classList.add("hidden");
+      input.classList.remove("hidden");
+      submitBtn.classList.remove("hidden");
+      startBtn.classList.add("hidden");
+      feedback.textContent = "";
+      score.textContent = "";
+      generateNumber();
+    };
+
+    instructionBtn.onclick = () => {
+      window.open("Game_binary_instruction.html", "_blank");
+    };
+  </script>
+</body>
+</html>

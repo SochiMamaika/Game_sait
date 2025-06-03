@@ -75,10 +75,12 @@
       font-weight: bold;                  /* Жирный шрифт */
       font-size: 1rem;                    /* Размер шрифта */
       transition: color 0.2s;             /* Плавное изменение цвета при наведении */
+      transition: all 0.3s ease-in-out;
     }
 
     nav a:hover {
       color: var(--text-color);           /* Цвет текста при наведении */
+      transform: scale(1.05); /* Чуть увеличиваем при наведении */
     }
 
     /* === Кнопка переключения темы === */
@@ -96,6 +98,10 @@
     .theme-toggle:hover {
       background-color: var(--accent-color);      /* Фон при наведении */
       color: var(--bg-color);                     /* Цвет текста при наведении */
+      box-shadow: 0 0 5px var(--accent-color);
+      transition: all 0.3s ease-in-out;
+      transform: scale(1.05); /* Чуть увеличиваем при наведении */
+      box-shadow: 0 0 5px var(--accent-color), 0 0 5px var(--accent-color);
     }
 
     /* === Секция с проектами === */
@@ -134,6 +140,13 @@
       border-radius: 0.5rem;                   /* Скруглённые углы */
       text-decoration: none;                   /* Без подчёркивания */
       font-weight: bold;                       /* Жирный шрифт */
+                                                /* Добавим сияние */
+      box-shadow: 0 0 5px var(--accent-color);
+      transition: all 0.3s ease-in-out;
+    }
+    .project-card a:hover {
+      transform: scale(1.05); /* Чуть увеличиваем при наведении */
+      box-shadow: 0 0 5px var(--accent-color), 0 0 5px var(--accent-color);
     }
 
     /* === Секция "Обо мне" === */
@@ -181,28 +194,28 @@
       <a href="math-knowledge.html" target="_blank">Открыть игру</a>
     </div>
 
-    <!-- Пример дополнительных тестовых проектов -->
+    <!-- 3 проект -->
     <div class="project-card">
-      <h2>Test1</h2>
-      <p>Test1</p>
-      <a href="math-knowledge.html" target="_blank">Открыть игру</a>
-    </div>
-
-    <div class="project-card">
-      <h2>Test2</h2>
-      <p>Test2</p>
-      <a href="math-knowledge.html" target="_blank">Открыть игру</a>
-    </div>
-
-    <div class="project-card">
-      <h2>Test3</h2>
-      <p>Test3</p>
-      <a href="math-knowledge.html" target="_blank">Открыть игру</a>
+      <h2>🧮 Binary count</h2>
+      <p>Игра, в которой вы пытаетесь перевести число из Десятичной формы в Двоичную.</p>
+      <a href="Game_binary.html" target="_blank">Открыть игру</a>
     </div>
 
     <div class="project-card">
       <h2>Test4</h2>
       <p>Test4</p>
+      <a href="math-knowledge.html" target="_blank">Открыть игру</a>
+    </div>
+
+    <div class="project-card">
+      <h2>Test5</h2>
+      <p>Test5</p>
+      <a href="math-knowledge.html" target="_blank">Открыть игру</a>
+    </div>
+
+    <div class="project-card">
+      <h2>Test6</h2>
+      <p>Test6</p>
       <a href="math-knowledge.html" target="_blank">Открыть игру</a>
     </div>
   </section>

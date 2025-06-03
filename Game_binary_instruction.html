@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<div id="binaryGuide" class="hidden" style="margin-top: 2rem; text-align: left; background: #f9f9f9; padding: 1.5rem; border-radius: 12px; max-width: 600px; margin-inline: auto; color: #333; box-shadow: 0 0 10px rgba(0,0,0,0.1); font-family: Arial, sans-serif;">
+  <h2 style="color: #222;">🧠 Как перевести число в двоичную систему счисления?</h2>
+  <p>Мы используем метод <strong>деления на 2 с записью остатков</strong>.</p>
+
+  <h3 style="margin-top: 1rem;">📘 Шаги:</h3>
+  <ol style="padding-left: 1.5rem;">
+    <li>1️⃣ Делим число на 2.</li>
+    <li>2️⃣ Запоминаем остаток (0 или 1).</li>
+    <li>3️⃣ Делим результат снова на 2.</li>
+    <li>4️⃣ Повторяем, пока результат не станет 0.</li>
+    <li>5️⃣ Читаем остатки в обратном порядке — это и будет двоичный код!</li>
+  </ol>
+
+  <div style="overflow-x: auto;">
+  <table style="width: 95%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem;">
+    <thead>
+      <tr style="background-color: #f9f9f9; text-align: center;">
+        <th style="padding: 8px;">Делим на 2</th>
+        <th style="padding: 8px;">Целое частное</th>
+        <th style="padding: 8px;">Остаток</th>
+      </tr>
+    </thead>
+    <tbody style="text-align: center;">
+      <tr><td style="padding: 8px;">13 / 2</td><td>6</td><td>1</td></tr>
+      <tr><td style="padding: 8px;">6 / 2</td><td>3</td><td>0</td></tr>
+      <tr><td style="padding: 8px;">3 / 2</td><td>1</td><td>1</td></tr>
+      <tr><td style="padding: 8px;">1 / 2</td><td>0</td><td>1</td></tr>
+    </tbody>
+  </table>
+</div>
+
+  <p style="margin-top: 1rem;">🧾 Остатки снизу вверх → <strong style="color: hsl(0, 0%, 0%);">1101</strong></p>
+  <p style="font-weight:lighter; margin-top: 1rem;">✅ Ответ: 13 → <strong style="color: hsl(0, 0%, 0%);">1101</strong></p>
+
+  <h3 style="margin-top: 1rem;">🚀 Запомни:</h3>
+  <ul style="padding-left: 1.2rem;">
+    <li>🧩 Остатки всегда <strong>0 или 1</strong> — это и есть биты</li>
+    <li>🔚 Последний результат деления должен быть <strong>0</strong></li>
+    <li>🔁 Порядок важен — читаем <strong>с конца</strong></li>
+  </ul>
+</div>
+
+</head>
