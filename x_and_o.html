@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Крестики-нолики</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 { 
+      color: #00ffff;
+      margin-bottom: 1rem;
+    }
+    .game-container {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 0 20px #00ffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .board-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .board {
+      display: grid;
+      gap: 6px;
+    }
+    .cell {
+      background-color: #2a2a2a;
+      aspect-ratio: 1/1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s;
+      width: 60px;
+    }
+    .cell:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      width: 200px;
+      transition: all 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+    }
+    .message {
+      margin: 15px 0;
+      font-size: 1.3rem;
+      min-height: 40px;
+      color: #00ffff;
+      font-weight: bold;
+    }
+    .size-selector {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    input {
+      padding: 0.7rem;
+      background-color: #2a2a2a;
+      color: white;
+      border: 2px solid #00ffff;
+      border-radius: 8px;
+      width: 80px;
+      text-align: center;
+    }
+    .x-symbol { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.7); }
+    .o-symbol { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.7); }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Крестики-нолики</h1>
+    
+    <div class="size-selector">
+      <label>Размер поля:</label>
+      <input type="number" id="size" min="3" max="10" value="3">
+      <button id="startBtn">Начать игру</button>
+    </div>
+    
+    <div class="board-wrapper">
+      <div id="board" class="board hidden"></div>
+    </div>
+    
+    <div class="message" id="message">Введите размер поля и нажмите "Начать игру"</div>
+    
+    <div class="controls hidden" id="gameControls">
+      <button id="restartBtn">Новая игра</button>
+    </div>
+  </div>
+
+  <script>
+    // Элементы интерфейса
+    const elements = {
+      board: document.getElementById('board'),
+      message: document.getElementById('message'),
+      sizeInput: document.getElementById('size'),
+      startBtn: document.getElementById('startBtn'),
+      restartBtn: document.getElementById('restartBtn'),
+      gameControls: document.getElementById('gameControls'),
+      boardWrapper: document.querySelector('.board-wrapper')
+    };
+
+    // Состояние игры
+    const state = {
+      board: [],
+      currentPlayer: 'X',
+      gameSize: 3,
+      gameActive: false
+    };
+
+    // Инициализация новой игры
+    function initGame() {
+      state.gameSize = Math.min(7, Math.max(3, parseInt(elements.sizeInput.value)));
+      elements.sizeInput.value = state.gameSize;
+      
+      state.board = Array(state.gameSize).fill().map(() => Array(state.gameSize).fill('*'));
+      state.currentPlayer = 'X';
+      state.gameActive = true;
+      
+      renderBoard();
+      updateMessage(`Ходит игрок ${state.currentPlayer}`);
+      
+      elements.board.classList.remove('hidden');
+      elements.gameControls.classList.remove('hidden');
+    }
+
+    // Отрисовка игрового поля
+    function renderBoard() {
+      elements.board.innerHTML = '';
+      elements.board.style.gridTemplateColumns = `repeat(${state.gameSize}, 60px)`;
+      
+      state.board.forEach((row, i) => {
+        row.forEach((cell, j) => {
+          const cellElement = document.createElement('div');
+          cellElement.className = 'cell';
+          cellElement.dataset.row = i;
+          cellElement.dataset.col = j;
+          
+          if (cell !== '*') {
+            const symbol = document.createElement('span');
+            symbol.className = cell === 'X' ? 'x-symbol' : 'o-symbol';
+            symbol.textContent = cell;
+            cellElement.appendChild(symbol);
+          }
+          
+          cellElement.addEventListener('click', handleCellClick);
+          elements.board.appendChild(cellElement);
+        });
+      });
+    }
+
+    // Обработка клика по клетке
+    function handleCellClick(e) {
+      if (!state.gameActive) return;
+      
+      const row = +e.target.dataset.row;
+      const col = +e.target.dataset.col;
+      
+      if (state.board[row][col] !== '*') {
+        updateMessage('Клетка уже занята!');
+        return;
+      }
+      
+      state.board[row][col] = state.currentPlayer;
+      renderBoard();
+      
+      if (checkWin(state.currentPlayer)) {
+        updateMessage(`Поздравляем, выиграл игрок ${state.currentPlayer}!`);
+        state.gameActive = false;
+        return;
+      }
+      
+      if (checkDraw()) {
+        updateMessage('Ничья!');
+        state.gameActive = false;
+        return;
+      }
+      
+      state.currentPlayer = state.currentPlayer === 'X' ? 'O' : 'X';
+      updateMessage(`Ходит игрок ${state.currentPlayer}`);
+    }
+
+    // Проверка победы
+    function checkWin(player) {
+      // Проверка строк и столбцов
+      for (let i = 0; i < state.gameSize; i++) {
+        if (state.board[i].every(cell => cell === player)) return true;
+        if (state.board.every(row => row[i] === player)) return true;
+      }
+      
+      // Проверка диагоналей
+      const diag1 = state.board.every((row, i) => row[i] === player);
+      const diag2 = state.board.every((row, i) => row[state.gameSize-1-i] === player);
+      
+      return diag1 || diag2;
+    }
+
+    // Проверка ничьи
+    function checkDraw() {
+      return state.board.flat().every(cell => cell !== '*');
+    }
+
+    // Обновление сообщения
+    function updateMessage(text) {
+      elements.message.textContent = text;
+    }
+
+    // Сброс игры
+    function resetGame() {
+      elements.board.classList.add('hidden');
+      elements.gameControls.classList.add('hidden');
+      updateMessage('Введите размер поля и нажмите "Начать игру"');
+    }
+
+    // Обработчики событий
+    elements.startBtn.addEventListener('click', initGame);
+    elements.restartBtn.addEventListener('click', resetGame);
+    elements.sizeInput.addEventListener('change', function() {
+      this.value = Math.min(7, Math.max(3, +this.value));
+    });
+  </script>
+</body>
+</html>
