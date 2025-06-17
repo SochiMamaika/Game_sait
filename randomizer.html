@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Рандомайзер ответов</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .game-box {
+      background: #2e2e2e;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 15px #00ffff70;
+    }
+
+    input, button {
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+    }
+
+    input[type="text"] {
+      width: 80%;
+    }
+
+    button {
+      background-color: #00ffff;
+      color: #000;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-top: 1rem;
+    }
+
+    li {
+      margin: 5px 0;
+      background-color: #3e3e3e;
+      padding: 0.5rem;
+      border-radius: 6px;
+    }
+
+    .result {
+      font-weight: bold;
+      margin-top: 20px;
+      color: #00ff90;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-box">
+    <h1>Рандомайзер ответов</h1>
+
+    <input type="text" id="inputValue" placeholder="Введите вариант">
+    <br>
+    <button onclick="addOption()">Добавить</button>
+    <button onclick="chooseRandom()">Выбрать случайно</button>
+    <button onclick="clearList()">Очистить список</button>
+
+    <h3>Введённые варианты:</h3>
+    <ul id="optionList"></ul>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const options = [];
+
+    function addOption() {
+      const input = document.getElementById('inputValue');
+      const value = input.value.trim();
+
+      if (value !== "") {
+        options.push(value);
+
+        const li = document.createElement('li');
+        li.textContent = value;
+        document.getElementById('optionList').appendChild(li);
+
+        input.value = "";
+      }
+    }
+
+    function chooseRandom() {
+      const resultDiv = document.getElementById('result');
+      if (options.length === 0) {
+        resultDiv.textContent = "⚠️ Сначала добавьте хотя бы один вариант.";
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * options.length);
+      const randomChoice = options[randomIndex];
+      resultDiv.textContent = "🎲 Случайный выбор: " + randomChoice;
+    }
+
+    function clearList() {
+      options.length = 0; // очистка массива
+      document.getElementById('optionList').innerHTML = ""; // очистка отображения
+      document.getElementById('result').textContent = ""; // очистка результата
+    }
+  </script>
+</body>
+</html>
